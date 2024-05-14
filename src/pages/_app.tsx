@@ -35,7 +35,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     useEffect(() => {
         auth.onAuthStateChanged(async (user) => {
             const isLoriginalOrg =
-                user && user.email && user.email.endsWith("@tindart.org");
+                user && user.email && user.email.endsWith("@loriginal.org");
 
             if (!isLoriginalOrg) {
                 signOut();
