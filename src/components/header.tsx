@@ -1,4 +1,10 @@
+import { useRouter } from "next/router";
 import Link from "next/link";
+import { User } from "firebase/auth";
+
+interface HeaderProps {
+    user: User | null;
+}
 
 interface MenuItem {
     name: string;
@@ -12,12 +18,18 @@ const menuItems: MenuItem[] = [
     { name: "Volunteer", path: "/volunteers" },
 ];
 
-const Header: React.FC = () => {
+const Header: React.FC<HeaderProps> = ({ user }) => {
+    const router = useRouter();
+
     return (
         <header className="bg-gray-900 text-white py-4 px-6 flex justify-between items-center">
             <div className="text-xl">
                 <Link href="/artists">
-                    <img className="max-h-12" src="../logo.png"></img>
+                    <img
+                        className="max-h-12"
+                        src="../logo.png"
+                        alt="Logo"
+                    ></img>
                 </Link>
             </div>
             <nav>
