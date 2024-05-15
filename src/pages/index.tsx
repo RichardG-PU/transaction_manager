@@ -11,6 +11,10 @@ interface HomeProps {
 const Home: React.FC<HomeProps> = (props) => {
     return (
         <div className="flex flex-col items-center justify-center h-screen">
+            <img
+                className="max-h-80 hover:text-gray-100 hover:shadow-gray-100 p-10"
+                src="../logo.png"
+            />
             {props.user ? (
                 <>
                     <span className="mb-4">

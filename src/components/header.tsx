@@ -21,6 +21,8 @@ const menuItems: MenuItem[] = [
 const Header: React.FC<HeaderProps> = ({ user }) => {
     const router = useRouter();
 
+    console.log(user);
+
     return (
         <header className="bg-gray-900 text-white py-4 px-6 flex justify-between items-center">
             <div className="text-xl">
