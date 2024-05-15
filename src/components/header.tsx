@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { User } from "firebase/auth";
@@ -21,17 +22,17 @@ const menuItems: MenuItem[] = [
 const Header: React.FC<HeaderProps> = ({ user }) => {
     const router = useRouter();
 
-    console.log(user);
+    useEffect(() => {
+        if (!(user && user.email && user.email.endsWith("@tindart.org"))) {
+            router.push("/");
+        }
+    }, [router, user]);
 
     return (
         <header className="bg-gray-900 text-white py-4 px-6 flex justify-between items-center">
             <div className="text-xl">
                 <Link href="/artists">
-                    <img
-                        className="max-h-12"
-                        src="../logo.png"
-                        alt="Logo"
-                    ></img>
+                    <img className="max-h-12" src="../logo.png" alt="Logo" />
                 </Link>
             </div>
             <nav>

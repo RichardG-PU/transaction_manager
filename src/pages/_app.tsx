@@ -22,7 +22,7 @@ const firebaseConfig = {
 };
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
-const provider = new GoogleAuthProvider(); // Create provider using GoogleAuthProvider directly
+const provider = new GoogleAuthProvider();
 
 provider.setCustomParameters({ prompt: "select_account" });
 
@@ -35,7 +35,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     useEffect(() => {
         auth.onAuthStateChanged(async (user) => {
             const isLoriginalOrg =
-                user && user.email && user.email.endsWith("@loriginal.org");
+                user && user.email && user.email.endsWith("@tindart.org");
 
             if (!isLoriginalOrg) {
                 signOut();
