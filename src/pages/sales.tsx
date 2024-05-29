@@ -127,10 +127,6 @@ const SalesPage: React.FC = () => {
       accessor: 'article',
     },
     {
-      Header: 'Comment',
-      accessor: 'comment',
-    },
-    {
       Header: 'Date',
       accessor: 'date',
     },
@@ -141,6 +137,7 @@ const SalesPage: React.FC = () => {
     {
       Header: 'Pick Up',
       accessor: 'pick_up',
+      Cell: ({ value }: any) => value ? 'Yes' : 'No'
     },
     {
       Header: 'Price',
@@ -168,9 +165,9 @@ const SalesPage: React.FC = () => {
   ], [volunteers]);
 
   return (
-    <div className="container pt-20 mx-auto px-4 py-6">
-      <div className="flex justify-between items-center mb-4">
-        <div className='ml-8 w-full p-4'>
+    <div className="flex flex-col items-center pt-20 px-4 py-6">
+      <div className='w-full max-w-3xl'>
+        <div className="flex justify-between items-center mb-4">
           <div className="flex items-center text-black">
             <select
               className="p-2 border rounded mr-2"
@@ -184,7 +181,6 @@ const SalesPage: React.FC = () => {
             </select>
           </div>
         </div>
-
         <DynamicTable
           columns={columns}
           data={sales.filter(sale => sale.article.toLowerCase().includes(searchTerm.toLowerCase()) || sale.volunteer_id.toLowerCase().includes(searchTerm.toLowerCase()))}
