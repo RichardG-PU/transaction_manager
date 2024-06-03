@@ -160,7 +160,7 @@ const VolunteersPage: React.FC = () => {
       <div className='ml-8 w-full p-4'>
         <DynamicTable
           columns={columns}
-          data={volunteers.filter(volunteer => volunteer.name.toLowerCase().includes(searchTerm.toLowerCase()) || volunteer.email.toLowerCase().includes(searchTerm.toLowerCase()))}
+          data={volunteers.filter(volunteer => (volunteer.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()))}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           addButtonText="Add a volunteer"
