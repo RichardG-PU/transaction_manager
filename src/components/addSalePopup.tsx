@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import AddVolunteerPopup from '../components/addVolunteersPopUp'; 
 
 interface SaleFormValues {
   article: string;
@@ -43,6 +44,8 @@ const AddSalePopup: React.FC<AddSalePopupProps> = ({ isOpen, onClose, onAddSale 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<SaleFormValues>();
   const [artists, setArtists] = useState<Artist[]>([]);
   const [volunteers, setVolunteers] = useState<Volunteer[]>([]);
+  const [showAddVolunteer, setShowAddVolunteer] = useState(false);
+  const [selectedVolunteer, setSelectedVolunteer] = useState('');
 
   useEffect(() => {
     const fetchArtists = async () => {
@@ -66,6 +69,20 @@ const AddSalePopup: React.FC<AddSalePopupProps> = ({ isOpen, onClose, onAddSale 
     fetchArtists();
     fetchVolunteers();
   }, []);
+
+  const handleVolunteerChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.value === 'add-new') {
+      setShowAddVolunteer(true);
+    } else {
+      setSelectedVolunteer(e.target.value);
+    }
+  };
+
+  const handleNewVolunteerAdded = (newVolunteer: Volunteer) => {
+    setVolunteers([...volunteers, newVolunteer]);
+    setShowAddVolunteer(false);
+    setSelectedVolunteer(newVolunteer.id);
+  };
 
   const onSubmit = async (data: SaleFormValues) => {
     try {
@@ -141,12 +158,15 @@ const AddSalePopup: React.FC<AddSalePopupProps> = ({ isOpen, onClose, onAddSale 
                 <select
                   {...register('volunteer_id', { required: 'Volunteer is required' })}
                   className="mt-1 block w-full rounded-md text-black border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
+                  value={selectedVolunteer}
+                  onChange={handleVolunteerChange}
                 >
                   {volunteers.map((volunteer) => (
                     <option key={volunteer.id} value={volunteer.id}>
                       {volunteer.name}
                     </option>
                   ))}
+                  <option value="add-new">Add New Volunteer</option>
                 </select>
                 {errors.volunteer_id && <p className="text-red-500 text-xs mt-1">{errors.volunteer_id.message}</p>}
               </label>
@@ -178,6 +198,14 @@ const AddSalePopup: React.FC<AddSalePopupProps> = ({ isOpen, onClose, onAddSale 
           </form>
         </Dialog.Panel>
       </div>
+
+      {showAddVolunteer && (
+        <AddVolunteerPopup
+          isOpen={showAddVolunteer}
+          onClose={() => setShowAddVolunteer(false)}
+          onAddVolunteer={handleNewVolunteerAdded}
+        />
+      )}
     </Dialog>
   );
 };

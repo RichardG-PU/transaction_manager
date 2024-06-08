@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import AddSalePopup from '../components/addSalePopup';
+import AddVolunteerPopup from '../components/addVolunteersPopUp';
 import DynamicTable from '../components/dynamicTable';
 import { Column } from 'react-table';
 import Modal from 'react-modal';
@@ -20,9 +21,16 @@ interface Sale {
   artist_id: string;
 }
 
+interface Volunteer {
+  id: string;
+  name: string;
+  email: string;
+}
+
 const SalesPage: React.FC = () => {
   const [sales, setSales] = useState<Sale[]>([]);
   const [isAddSalePopupOpen, setAddSalePopupOpen] = useState(false);
+  const [isAddVolunteerPopupOpen, setAddVolunteerPopupOpen] = useState(false);
   const [selectedSale, setSelectedSale] = useState<Sale | null>(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -121,6 +129,10 @@ const SalesPage: React.FC = () => {
     }
   };
 
+  const handleNewVolunteerAdded = (newVolunteer: Volunteer) => {
+    setVolunteers({ ...volunteers, [newVolunteer.id]: newVolunteer.name });
+  };
+
   const columns: Column<Sale>[] = React.useMemo(() => [
     {
       Header: 'Article',
@@ -191,37 +203,42 @@ const SalesPage: React.FC = () => {
         />
       </div>
       <AddSalePopup isOpen={isAddSalePopupOpen} onClose={() => setAddSalePopupOpen(false)} onAddSale={handleAddSale} />
+      <AddVolunteerPopup
+        isOpen={isAddVolunteerPopupOpen}
+        onClose={() => setAddVolunteerPopupOpen(false)}
+        onAddVolunteer={handleNewVolunteerAdded}
+      />
       {isDeleteModalOpen && (
         <Modal
-        isOpen={isDeleteModalOpen}
-        onRequestClose={() => setDeleteModalOpen(false)}
-        contentLabel="Delete Confirmation"
-        className="fixed inset-0 z-10 flex items-center justify-center overflow-y-auto"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-25"
-      >
-        <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6 mx-auto">
-          <h2 className="text-lg font-bold text-black">Confirm Delete</h2>
-          {selectedSale && (
+          isOpen={isDeleteModalOpen}
+          onRequestClose={() => setDeleteModalOpen(false)}
+          contentLabel="Delete Confirmation"
+          className="fixed inset-0 z-10 flex items-center justify-center overflow-y-auto"
+          overlayClassName="fixed inset-0 bg-black bg-opacity-25"
+        >
+          <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6 mx-auto">
+            <h2 className="text-lg font-bold text-black">Confirm Delete</h2>
+            {selectedSale && (
               <p className="text-black">
                 Are you sure you want to delete the sale {selectedSale.article}?
               </p>
             )}
-          <div className="mt-6 flex justify-end">
-            <button
-              onClick={handleDelete}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mr-2"
-            >
-              Delete
-            </button>
-            <button
-              onClick={() => setDeleteModalOpen(false)}
-              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-            >
-              Cancel
-            </button>
+            <div className="mt-6 flex justify-end">
+              <button
+                onClick={handleDelete}
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mr-2"
+              >
+                Delete
+              </button>
+              <button
+                onClick={() => setDeleteModalOpen(false)}
+                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
-        </div>
-      </Modal>
+        </Modal>
       )}
       {isEditModalOpen && (
         <Dialog

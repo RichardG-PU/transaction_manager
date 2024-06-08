@@ -1,8 +1,10 @@
 import React from 'react';
 import { Dialog } from '@headlessui/react';
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
 
 interface VolunteerFormValues {
+  id: string;
   name: string;
   email: string;
 }
@@ -16,9 +18,15 @@ interface AddVolunteerPopupProps {
 const AddVolunteerPopup: React.FC<AddVolunteerPopupProps> = ({ isOpen, onClose, onAddVolunteer }) => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm<VolunteerFormValues>();
 
-  const onSubmit = (data: VolunteerFormValues) => {
-    onAddVolunteer(data);
-    reset();
+  const onSubmit = async (data: VolunteerFormValues) => {
+    try {
+      const response = await axios.post('/api/volunteers', data);
+      onAddVolunteer(response.data);
+      reset();
+      onClose();
+    } catch (error) {
+      console.error('Error adding volunteer:', error);
+    }
   };
 
   return (
